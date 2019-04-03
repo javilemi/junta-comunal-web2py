@@ -1,0 +1,14 @@
+def vista_existencia(): 
+    form = SQLFORM.grid(db.habitantes, paginate =20, csv=False,links=None, create=False)  #csv es para no mostrar explortar,links: es de los botones de abajo , create: es de el boton añadir registro
+    form2 = crud.create(db.habitantes)                                                   #crea el formulario de arriba
+    tipo = db(db.habitantes.cedula == request.vars.cedula).select()                      # hay tipo cuando la cedula=a una de la bd
+
+    if form2.errors and tipo:                                                            #si hay error en form2 y hay tipo
+#db.habitantes.cedula.requires=IS_NOT_IN_DB
+        for x in tipo:
+        
+            response.flash = "la cedula {1} ya existe,  pertenece a: {2} {3}".format(request.vars.cedula, x.nombres, x.apellidos)
+             
+#if form2.process().accepted: preguta: como recargar en form cuando de inserta? 
+        
+    return dict(form = form, form2 = form2)
